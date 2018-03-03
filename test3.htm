@@ -1,0 +1,334 @@
+<html>
+<head>
+<style>
+.con
+{
+height:100px;
+widht:100%;
+background-color:azure;
+
+
+}
+
+
+.con p
+{
+text-align:center;
+font-size:40px;
+padding-top:20px;
+}
+.container
+{
+width:100%;
+background-color:#ddd;
+box-sizing:border-box;
+height:40px;
+}
+#reed{
+ background-color: #4CAF50;
+height:40px;
+}
+#iee
+{
+ background-color: #f44336;
+height:40px;
+}
+#aee{
+ background-color: #2196F3;
+height:40px;
+}
+#see{
+ background-color: pink;
+height:40px;
+}
+#eee{
+ background-color: orange;
+height:40px;
+}
+#cee{
+ background-color: yellow;
+height:40px;
+
+}
+.last
+{
+height:140px;
+
+
+}
+table
+{
+border:1px solid black;
+padding-left:20px;
+}
+table th,tr,td
+{
+border:1px solid black;
+font-size:20px;
+}
+td
+{
+padding-bottom:20px;
+padding-top:20px;
+}
+#but
+{
+font-size:28px;
+padding;10px 5px 10px 5px;
+margin-left:90px;
+}
+#but:hover
+{
+opacity:0.6;
+}
+#butt
+{
+font-size:30px;
+padding;10px 5px 10px 5px;
+margin-left:50%;
+cursor:pointer;
+
+border:none;
+background-color:#4CAF50;
+color:white;
+
+}
+#butt:hover
+{
+opacity:0.6;
+}
+body
+{
+background-image:url("img3.jpg");
+}
+</style>
+</head>
+<body>
+<div class="con">
+<p>Interest  Progress  Bar</p>
+
+</div>
+
+
+
+<p> Realistic  </p>
+<div class="container">
+<div id="reed">
+<p id="a1"></p>
+</div>
+</div>
+
+
+
+
+<p> Investigative </p>
+<div class="container">
+<div id="iee">
+<p id="a2"></p>
+
+</div>
+</div>
+
+<p> Artistic </p>
+<div class="container">
+<div id="aee">
+<p id="a3"></p>
+
+</div>
+</div>
+
+<p> Social </p>
+<div class="container">
+<div id="see">
+<p id="a4"></p>
+</div>
+</div>
+<p> Enterprising </p>
+<div class="container">
+<div id="eee">
+<p id="a5"></p>
+
+</div>
+</div>
+<p> Conventional </p>
+<div class="container">
+<div id="cee">
+<p id="a6"></p>
+
+</div>
+</div>
+
+<!--<div class="last">
+<p>Your Interest Types is/are:<p id="ak"><br>
+<p id="bk">
+</p>
+-->
+
+
+<br>
+<br>
+<hr>
+<p> What does it indicate ?</p><br>
+<p>
+<table class="f">
+<tr>
+<th>Interest Type</th>
+<th>Description </th>
+</tr>
+<tr>
+<td> Realistic </td>
+<td>This type of people likes to work with things such as tools, machines, vehicles,
+materials, food, plants or animals. They like to make, build, or fix things. They like
+to be physically active.
+</td></tr>
+<tr>
+<td>
+Investigative</td>
+<td>This type of people likes to observe, investigate and analyze. They like to work
+with ideas, concepts and theories and use what they learn to design things and
+solve problems.</td>
+</tr>
+<tr>
+<td>
+Artistic
+</td>
+<td>
+This type of people likes to use their imagination and creativity. They like to work
+in the arts, music, writing, or entertaining.
+</td>
+
+</tr>
+<tr>
+<td>
+Social
+</td>
+<td>
+This type of people likes to work with people. They like to help others. They like to
+teach them, take care of them, cure them, cure them of illnesses or help them get
+along with each other
+</td>
+</tr>
+<tr>
+<td>
+Enterprising
+</td>
+<td>
+People who are adventurous, ambitious, assertive, extroverted, energetic, enthusiastic, confident
+ , optimistic , dominant, persuasive, and motivational.
+ They prefer work that involves leadership, business, politics, public speaking , being in charge,
+ taking risks, debating, and competing.
+</td>
+</tr>
+
+<tr>
+<td>
+
+Conventional
+</td>
+<td>
+This type of people likes to work with data – facts, numbers, and files. They like to
+organize information to help things run smoothly. They like to carry out business
+and clerical projects in structured ways paying attention to detail.
+</td>
+</tr>
+</table>
+
+</div>
+
+</p>
+<br>
+
+<p>Click Next button to proceed further</p>
+<button id="butt" style="font-size:25px; "onclick="m()">Next</button>
+<script>
+
+var r=localStorage.getItem('re');
+var i=localStorage.getItem('ie');
+var a=localStorage.getItem('ae');
+var s=localStorage.getItem('se');
+var e=localStorage.getItem('ee');
+var c=localStorage.getItem('ce');
+
+document.getElementById("reed").style.width=r+"%";
+document.getElementById("a1").innerHTML=Math.round(r)+"%";
+
+document.getElementById("iee").style.width=i+"%";
+document.getElementById("a2").innerHTML=Math.round(i)+"%";
+document.getElementById("aee").style.width=a+"%";
+document.getElementById("a3").innerHTML=Math.round(a)+"%";
+document.getElementById("see").style.width=s+"%";
+document.getElementById("a4").innerHTML=Math.round(s)+"%";
+document.getElementById("eee").style.width=e+"%";
+document.getElementById("a5").innerHTML=Math.round(e)+"%";
+document.getElementById("cee").style.width=c+"%";
+document.getElementById("a6").innerHTML=Math.round(c)+"%";
+var mx=Math.max(r,i,a,s,e,c);
+var ar=[r,i,a,s,e,c]
+ar.sort(function(a,b){return a-b});
+var se=ar[4];
+var f=ar[5];
+//document.getElementById("q").innerHTML="FIR"+f+"+SEC"+se;
+/*if(f==r)
+{
+document.getElementById("ak").innerHTML=" Realistic , ";
+
+}
+else if(f==i)
+{
+document.getElementById("ak").innerHTML="  Investigative ,";
+
+}else if(f==a)
+{
+document.getElementById("ak").innerHTML="  Artistic ,";
+
+}else if(f==s)
+{
+document.getElementById("ak").innerHTML=" Social , ";
+
+}else if(f==e)
+{
+document.getElementById("ak").innerHTML=" Enterprising ,";
+
+}
+else if(f==c)
+{
+document.getElementById("ak").innerHTML=" Conventional , ";
+
+}
+if(se==r)
+{
+document.getElementById("bk").innerHTML=" Realistic  ";
+
+}
+if(se==i)
+{
+document.getElementById("bk").innerHTML="  Investigative ";
+
+}if(se==a)
+{
+document.getElementById("bk").innerHTML="  Artistic ";
+
+}if(se==s)
+{
+document.getElementById("bk").innerHTML=" Social ";
+
+}if(se==e)
+{
+document.getElementById("bk").innerHTML=" Enterprising ";
+
+}
+if(se==c)
+{
+document.getElementById("bk").innerHTML=" Conventional  ";
+
+}
+*/
+function m()
+{
+
+document.location.href="test44.html";
+}
+
+</script>
+</body>
+</html>

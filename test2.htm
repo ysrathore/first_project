@@ -1,0 +1,688 @@
+<!doctype html>
+<?php   
+session_start();  
+if(!isset($_SESSION["sess_user"]))
+{  
+    header("Location:login.php");  
+} else 
+{
+ ?>
+<html>
+<head>
+
+<style>
+#f
+{
+height:80px;
+background-color:#77B9F0;
+
+}
+#f h1{
+color:white;
+text-align:center;
+
+
+}
+
+
+
+.answers label{
+  display: block;
+  margin-bottom: 10px;
+  color:white;cursor:pointer;
+}
+
+.slide{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.active-slide{
+  opacity: 1;
+  z-index: 2;
+}.quiz-container{
+  position: relative;
+  height: 200px;
+  margin-top: 40px;
+  margin-bottom:40px;
+}
+button
+{
+font-size:22px;
+color:#fff;
+ background-color: #279;
+padding:7px 4px 7px 4px;
+margin-right:40px;
+margin-left:20px;cursor:pointer;
+}
+.question{
+  font-size: 30px;
+  margin-bottom: 20px;color:white;
+  margin-left:10px;
+}
+.answers {
+  margin-bottom: 20px;
+  text-align: left;
+  display: inline-block;
+  font-size:20px;
+  margin-left:10px;
+}
+body
+{
+background-image:url("zx.jpg");
+ background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+a{text-decoration:none;
+margin-left:80%;
+font-size:20px;
+color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="f"><h1>Personality Test</h1></div>
+<div class="fs">
+
+<a href="logout.php" >Logout</a>
+
+
+
+</div>
+
+
+<div class="quiz-container">
+  <div id="quiz"></div>
+</div>
+<button id="previous">Previous Question</button>
+<button id="next">Next Question</button>
+<button id="submit">Submit Quiz</button>
+<div id="results"></div>
+<p id="eg"></p>
+<script>
+(function()
+{
+
+
+
+const myQuestions=[
+ {
+question: " 1.  Which of these types of work seems more interesting to you?",
+answers:{
+a: "Making food products like biscuits, jam and butter for a packaged food company",
+b: "Creating cartoon and comic characters for a newspaper",
+c: "Making software and websites for an IT company",
+d: "None of the above",
+}},
+{
+question: " 2.  In your district, an election is coming up- which candidate would you vote for?",
+answers:{
+a:"Candidate who will ensure better livelihood for farmers",
+b:"Candidate who will plant more trees and set up yoga centres for fitness and health of citizens",
+c:"Candidate who will ensure education is provided to all children in the district",
+d:"None of the above",
+}},
+ {
+question: " 3.  On a visit to a new town, which of these places would you like to see first?",
+answers:{
+a:"A processing factory for cold drinks (e.g. Coke Pepsi, 7up)",
+b:"An ancient theatre of drama and play",
+c:"A newly design building of a stock exchange",
+d:"None of the above",
+}},
+{
+question: " 4.  During a field trip from your college, which of these places would you like to visit?",
+answers:{
+a:"An organic fruits farm",
+b:"A cyber hub",
+c:"A cancer hospital",
+d:"None of the above",
+}},
+{
+question: " 5.  Given an option, which of these types of work would you like to do to earn money?",
+answers:{
+a:"Help clients make diet charts and nutritional plans for weight loss",
+b:"Repair computers and other electronic gadgets",
+c:"Meet with clients, help them open bank accounts and explain money saving schemes",
+d:"None of the above",
+}},
+{
+question: " 6.  During festivals (e.g. Diwali) at your home, which of these tasks would you like to take up?",
+answers:{
+a:"Decide the menu and prepare food items and sweets for guests",
+b:"Explain to society residents, the hazards of burning crackers",
+c:"Manage budget and bills of all the purchases during the festival",
+d:"None of the above",
+}},
+{
+question: " 7.  Which of these sentences describes you the best?",
+answers:{
+a:"I can work hard for long hours under pressure and strict timelines",
+b:"I like to perform songs, dance or act in front of others",
+c:"I am a patient person who is good at understanding other people",
+d:"None of the above",
+}},{question: " 8.  Which of these activities would you like to do?",
+answers:{
+a:"Learn about complex machines and instructions to handle them",
+b:"Do different hairstyles and learn beauty tips",
+c:"Meet new people and talk to them",
+d:"None of the above",
+}},{question: " 9.  Which of these projects would you like to work on?",
+answers:{
+a:"Project to understand and show how birds fly",
+b:"Project to understand and show how a computer works",
+c:"Project to teach students of class 2nd and class 3rd in your village",
+d:"None of the above",
+}},{question: " 10.  Which of these workplaces would you be more comfortable working in?",
+answers:{
+a:"In an airport where hundreds of people leave and arrive by flight each day",
+b:"In a company where different technical challenges are solved",
+c:"In a bank where clients come to deposit and withdraw their money-",
+d:"None of the above",
+}},{question: " 11.  Given an option, which of these types of work would you like to do to earn money?",
+answers:{
+a:"Manage ticketing of passengers in an airport",
+b:"Give polio medicine to patients in government camps",
+c:"Sell insurance policies and mutual funds to clients",
+d:"None of the above"
+}},{question: " 12.  On TV, which of these programs would you like to watch?",
+answers:{
+a:"A TV program on manufacturing of cars and automobiles",
+b:"A TV program on keeping the body healthy and fit",
+c:"A TV program on how technology is changing the world",
+d:"None of the above",
+}},{question: " 13.  Which of these sentences is true for you?",
+answers:{
+a:"I enjoy things like painting, drawing, photography or sketching",
+b:"I am fascinated by new technologies and how they work",
+c:"I enjoy reading books and telling stories to groups of children",
+d:"None of the above",
+}},
+{question: " 14.  Your teacher asked you to attend a lecture, which one would you like to attend?",
+answers:{
+a:"Lecture on - Animation and game design",
+b:"Lecture on- How electricity is generated",
+c:"Lecture on - Top business woman in the world",
+d:"None of the above",
+}},{question: " 15.  Your friends describe you as:",
+answers:{
+a:"A creative and imaginative person",
+b:"A caring person who cannot see others suffering with diseases",
+c:"A person who can take care of money and expenses carefully",
+d:"None of the above",
+}},{question: " 16.  What type of person do you admire the most?",
+answers:{
+a:"A person who has skills to make anyone look very good in a few minutes",
+b:"A person who has skills to fix any electronic device - Phone, Fridge, TV - in a few minutes",
+c:"A person who has skills to help someone in pain and disease",
+d:"None of the above",
+}},{question: " 17.  Given an opportunity which these businesses would you like to own?",
+answers:{
+a:"A beauty parlor",
+b:"A manufacturing plant",
+c:"An online store",
+d:"None of the above",
+}},{question: " 18.  Your school is conducting an annual day event - which of these responsibilities would you like to take up?",
+answers:{
+a:"Do makeup and hairstyle for all the participants of the annual day",
+b:"Be in charge of first-aid during the function",
+c:"Put up a stall at the annual day event and sell snacks",
+d:"None of the above",
+}},{question: " 19.  Given an opportunity, what type of business would you like to own?",
+answers:{
+a:"A software company",
+b:"A school",
+c:"A marketing company",
+d:"None of the above",
+}},{question: " 20.  Which of these sentences describes you the best?",
+answers:{
+a:"I like to learn about new technologies, gadgets and devices",
+b:"I like to meet old people, talk to them and help them",
+c:"I like to work in a team and help everyone in the team",
+d:"None of the above",
+
+}}
+];
+function buildQuiz() {
+ 
+    const output = [];
+
+
+    myQuestions.forEach((currentQuestion, questionNumber) => {
+          const answers = [];
+
+         for (letter in currentQuestion.answers) {
+   
+        answers.push(
+          `<label>
+             <input type="radio" name="question${questionNumber}" value="${letter}">
+              ${letter} :
+              ${currentQuestion.answers[letter]}
+           </label>`
+        );
+      }
+
+      
+      output.push(
+        `<div class="slide">
+           <div class="question"> ${currentQuestion.question} </div>
+           <div class="answers"> ${answers.join("")} </div>
+         </div>`
+      );
+    });
+
+
+    quizContainer.innerHTML = output.join("");
+  }
+
+  function showResults() 
+  {
+   var r=0,i=0,a1=0,s=0,e=0,c1=0;
+   var tt=0;
+ 
+    const answerContainers = quizContainer.querySelectorAll(".answers");
+
+ 
+    let numCorrect = 0;
+
+    
+    myQuestions.forEach((currentQuestion, questionNumber) => {
+    
+      const answerContainer = answerContainers[questionNumber];
+      const selector = `input[name=question${questionNumber}]:checked`;
+      const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+	  
+	  
+	  
+	  
+
+ if(questionNumber==0)
+	 {
+	 if (userAnswer === "a")
+{
+r=r+12.5;
+}	 
+	 else if (userAnswer === "b")
+{
+a1=a1+12.5;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+i=i+11.10;
+}}
+ if(questionNumber==1)
+	 {
+	 if (userAnswer === "a")
+{
+s=s+10;
+}	 
+	 else if (userAnswer === "b")
+{
+s=s+5;
+e+=4.54;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+s+=5;
+i+=5.55
+}}
+ if(questionNumber==2)
+	 {
+	 if (userAnswer === "a")
+{
+r+=12.5;
+}	 
+	 else if (userAnswer === "b")
+{
+a1+=12.5;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+c1+=14.28;
+}}
+ if(questionNumber==3)
+	 {
+	 if (userAnswer === "a")
+{
+r+=12.5;
+}	 
+	 else if (userAnswer === "b")
+{
+i+=11.11;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+s+=10;
+}}
+ if(questionNumber==4)
+	 {
+	 if (userAnswer === "a")
+{
+s+=10;
+
+}	 
+	 else if (userAnswer === "b")
+{
+r+=12.5;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+e+=9.09;
+}}
+ if(questionNumber==5)
+	 {
+	 if (userAnswer === "a")
+{
+c1+=14.28;
+}	 
+	 else if (userAnswer === "b")
+{
+e+=9.09;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+c1+=14.28;
+}}
+ if(questionNumber==6)
+	 {
+	 if (userAnswer === "a")
+{
+c1+=7.14;
+i+=5.55;
+}	 
+	 else if (userAnswer === "b")
+{
+a1+=12.5;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+c1+=7.14;
+}}
+ if(questionNumber==7)
+	 {
+	 if (userAnswer === "a")
+{
+r+=12.5;
+}	 
+	 else if (userAnswer === "b")
+{
+a1+=12.5;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+e+=9.09;
+}}
+ if(questionNumber==8)
+	 {
+	 if (userAnswer === "a")
+{
+i+=11.11;
+}	 
+	 else if (userAnswer === "b")
+{
+i+=11.11;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+e+=9.09;
+}}
+ if(questionNumber==9)
+	 {
+	 if (userAnswer === "a")
+{
+s+=10;
+}	 
+	 else if (userAnswer === "b")
+{
+i+=11.11
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+c1+=14.28;
+}}
+ if(questionNumber==10)
+	 {
+	 if (userAnswer === "a")
+{
+c1+=14.28;
+}	 
+	 else if (userAnswer === "b")
+{
+s+=10;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+e+=9.09;
+}}
+ if(questionNumber==11)
+	 {
+	 if (userAnswer === "a")
+{
+r+=12.5;
+}	 
+	 else if (userAnswer === "b")
+{
+a1+=12.5;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+i+=11.11;
+}}
+
+ if(questionNumber==12)
+	 {
+	 if (userAnswer === "a")
+{
+a1+=12.5;
+}	 
+	 else if (userAnswer === "b")
+{
+i+=11.11;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+e+=9.09;
+}}
+
+ if(questionNumber==13)
+	 {
+	 if (userAnswer === "a")
+{
+i+=11.11;
+}	 
+	 else if (userAnswer === "b")
+{
+i+=11.11;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+c1+=14.28;
+}}
+ if(questionNumber==14)
+	 {
+	 if (userAnswer === "a")
+{
+a1+=12.5;
+}	 
+	 else if (userAnswer === "b")
+{
+s+=10;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+c1+=14.28;
+}}
+
+
+ if(questionNumber==15)
+	 {
+	 if (userAnswer === "a")
+{
+e+=9.09;
+}	 
+	 else if (userAnswer === "b")
+{
+r+=12.5;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+s+=10;
+}}
+ if(questionNumber==16)
+	 {
+	 if (userAnswer === "a")
+{
+r+=12.5;
+}	 
+	 else if (userAnswer === "b")
+{
+r+=12.5;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+e+=9.09;
+}}
+ if(questionNumber==17)
+	 {
+	 if (userAnswer === "a")
+{
+a1+=12.5;
+}	 
+	 else if (userAnswer === "b")
+{
+s+=10;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+e+=9.09;
+}}
+ if(questionNumber==18)
+	 {
+	 if (userAnswer === "a")
+{
+i+=5.55;
+e+=4.54;
+}	 
+	 else if (userAnswer === "b")
+{
+s+=10;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+c1+=14.28;
+}}
+ if(questionNumber==19)
+	 {
+	 if (userAnswer === "a")
+{
+i+=11.11;
+}	 
+	 else if (userAnswer === "b")
+{
+s+=10;
+}	 
+	 
+	 else if (userAnswer === "c")
+{
+e+=9.09;
+}}
+ 
+	  
+	  
+    });
+
+
+	
+		resultsContainer.innerHTML="<br>Value of r"+r+"<br>Value of i"+i+"<br>Value of a"+a1+"<br>Value of s"+s+"<br>Value of e"+e+"<br>Value of c"+c1;
+		   
+			localStorage.setItem('re',r);
+			localStorage.setItem('ie',i);
+			localStorage.setItem('ae',a1);
+			localStorage.setItem('se',s);
+			localStorage.setItem('ee',e);
+			localStorage.setItem('ce',c1);
+		
+			
+			
+			
+	document.location.href="test3.html"		
+  }
+
+  function showSlide(n) {
+    slides[currentSlide].classList.remove("active-slide");
+    slides[n].classList.add("active-slide");
+    currentSlide = n;
+    
+    if (currentSlide === 0) {
+      previousButton.style.display = "none";
+    } else {
+      previousButton.style.display = "inline-block";
+    }
+    
+    if (currentSlide === slides.length - 1) {
+      nextButton.style.display = "none";
+      submitButton.style.display = "inline-block";
+    } else {
+      nextButton.style.display = "inline-block";
+      submitButton.style.display = "none";
+    }
+  }
+
+  function showNextSlide() {
+    showSlide(currentSlide + 1);
+  }
+
+  function showPreviousSlide() {
+    showSlide(currentSlide - 1);
+  }
+
+  const quizContainer = document.getElementById("quiz");
+  const resultsContainer = document.getElementById("results");
+  const submitButton = document.getElementById("submit");
+
+  buildQuiz();
+
+  const previousButton = document.getElementById("previous");
+  const nextButton = document.getElementById("next");
+  const slides = document.querySelectorAll(".slide");
+  let currentSlide = 0;
+
+  showSlide(0);
+
+  submitButton.addEventListener("click", showResults);
+  previousButton.addEventListener("click", showPreviousSlide);
+  nextButton.addEventListener("click", showNextSlide);
+})();
+
+
+
+</script>
+</body>
+</html>
